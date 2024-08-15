@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar_buttons from "./sidebar_buttons";
 import { IoMdHome } from "react-icons/io";
 import { MdOutlineWatchLater, MdSubscriptions } from "react-icons/md";
@@ -10,9 +10,14 @@ import { BiSolidLike, BiSolidVideos } from "react-icons/bi";
 import Footer from "./Footer";
 import { RootState } from "@/app/GlobalStates/store";
 import { useSelector } from "react-redux";
-
+import { useRouter } from "next/router";
 const Sidebar = () => {
   const isSideBarOpen=useSelector((state:RootState)=>state.sidebar.isSideBarOpen)
+  // const router=useRouter()
+  // const {pathname}=router
+  useEffect(()=>{
+    
+  },[])
   return (
     <div>
      
@@ -20,6 +25,7 @@ const Sidebar = () => {
       <div className="w-full"> 
       
         <div>
+          
           <Sidebar_buttons bg={true} title={"Home"} icon={<IoMdHome />} />
         </div>
         <div>

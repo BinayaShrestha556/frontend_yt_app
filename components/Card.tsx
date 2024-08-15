@@ -45,7 +45,7 @@ const truncate =(string:string)=>{
       <div className="flex w-full gap-2">
         <div className="w-10">
           <div className="w-10 aspect-square relative overflow-hidden rounded-full bg-gray-500 mt-1">
-            <Image alt="user" src={thumbnail} layout="fill" objectFit="cover" />
+            <Image alt="user" src={avatar} 	sizes="(max-width: 500px) 100vw, 33vw" layout="fill" objectFit="cover" />
           </div>
         </div>
         <div className="flex-grow">

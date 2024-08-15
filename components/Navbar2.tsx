@@ -8,7 +8,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdVideoCall } from "react-icons/md";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { RootState } from "@/app/GlobalStates/store";
-import { setLoginModalState } from "@/app/GlobalStates/Features/login/modalSlice";
+import { setLoginModalState } from "@/app/GlobalStates/Features/modalSlice";
 import { setLoginState } from "@/app/GlobalStates/Features/login/loginSlice";
 
 const Navbar = () => {

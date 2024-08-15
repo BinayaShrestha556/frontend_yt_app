@@ -6,7 +6,7 @@ import Card from "./Card";
       const res = await axios.get(
         "http://localhost:8000/api/v1/video/all-videos"
       );
-      console.log(res.data.data);
+      // console.log(res.data.data);
 
       return res.data.data;
     } catch (error) {

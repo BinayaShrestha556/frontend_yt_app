@@ -1,7 +1,8 @@
 "use client";
-import { setLoginModalState } from "@/app/GlobalStates/Features/login/modalSlice";
+import { setLoginModalState } from "@/app/GlobalStates/Features/modalSlice";
 import { setLoginState } from "@/app/GlobalStates/Features/login/loginSlice";
-import { setIsSideBarOpen } from "@/app/GlobalStates/Features/login/sidebarSlice";
+import { setIsSideBarOpen } from "@/app/GlobalStates/Features/sidebarSlice";
+import { updateObject} from "@/app/GlobalStates/Features/userInfoSlice"; 
 import { RootState } from "@/app/GlobalStates/store";
 import axios from "axios";
 import React, { useEffect } from "react";
@@ -12,8 +13,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Link from "next/link";
+import { ObjectState } from "@/app/GlobalStates/Features/userInfoSlice";
+import Image from "next/image";
+interface user{
+  _id: string,
+  username: string,
+  email:string
+  fullname:string
+  avatar:string,
+  coverImage:string,
+  watchHistory:any[],
+  createdAt:string
+  updatedAt:string
+  __v:number
+}
 
 const Navbar = () => {
+  const userInfo=useSelector((state:RootState)=>state.user)
   const isLoggedIn = useSelector((state: RootState) => state.isLoggedIn.isLoggedIn);
   const modalState = useSelector((state: RootState) => state.loginModal.isModalOpen);
   const isSideBarOpen= useSelector((state: RootState)=> state.sidebar.isSideBarOpen)
@@ -33,26 +49,50 @@ const Navbar = () => {
       console.error("Logout failed:", error);
     }
   };
+  const getCheckLoginData=async ():Promise<user|null>=>{
+    try {
+      const loginUser = await axios.post(
+        "http://localhost:8000/api/v1/user/current-user"   ); 
+         if (loginUser.status == 200) {
+        
+        
+        dispatch(setLoginState(true));
+    return loginUser.data.data
+      }
+     
+     
+    } catch (error) {
+      console.log("error while loading current user",error)
+    } return null
+  }
   const checkLogin = async () => {
 
     try {
       const refresh=await axios.post("http://localhost:8000/api/v1/user/refresh-access")
       console.log(refresh.status, " refresh")
-      const loginUser = await axios.post(
-        "http://localhost:8000/api/v1/user/current-user"
-      );
-      if (loginUser.status == 200) {
-        dispatch(setLoginState(true));
-        return;
+      const data=await getCheckLoginData()
+ 
+
+    if(data){     
+      const setData:ObjectState={
+        _id: data._id,
+        username:data.username,
+        fullname:data.fullname,
+        email:data.email,
+    
+        avatar:data.avatar
+        
       }
+  
+      dispatch(updateObject(setData))
+    }
       
     } catch (error:any) {
       console.log(error)
     }
   };
   useEffect(() => {
-    // Any client-side specific logic can go here
-    console.log("helooooooooo")
+
     checkLogin()
   }, []);
 
@@ -78,7 +118,14 @@ const Navbar = () => {
           <Link href={isLoggedIn?"/video/upload":"/user/login"}><MdVideoCall/></Link>
           <IoMdNotificationsOutline />
           {isLoggedIn ? (
-            <div onClick={handleOnclickLogout} className="w-8 h-8 rounded-full bg-gray-400/50"></div>
+            <div className="flex items-center  group  overflow-hidden hover:w-28 gap-2 cursor-pointer transition-all p-1 w-10 bg-gray-400/50 rounded-full"><div onClick={handleOnclickLogout} className="w-8 h-8 rounded-full relative overflow-hidden ">     <Image
+            src={userInfo.avatar}
+            alt="pfp"
+            layout="fill"
+            objectFit="cover"
+          /></div>
+          <p className="hidden group-hover:block text-sm">{userInfo.username}</p>
+          </div>
           ) : (
             <button
               onClick={() => {
