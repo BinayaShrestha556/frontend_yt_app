@@ -26,7 +26,7 @@ const AddComment = ({id,parent}:{id:string,parent:string|null}) => {
           content:comment,
           parent
         }
-        const res=await axios.post("http://localhost:8000/api/v1/comments/post-comment",data)
+        const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/comments/post-comment`,data)
         if(res.data.statusCode==200){
           console.log("success")
           setAddedComment([...addedComment,comment])

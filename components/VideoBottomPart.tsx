@@ -44,7 +44,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
     axios.defaults.withCredentials = true;
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/video/get-other-info-on-video",
+        `${process.env.NEXT_PUBLIC_TEST}/video/get-other-info-on-video`,
         { videoId: id }
       );
       setLoading(false);
@@ -78,7 +78,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
   const handleLike = async () => {
     if (!isLoggedIn) {alert("need to login first");return};
     try {
-      await axios.post("http://localhost:8000/api/v1/likes/like", {
+      await axios.post(`${process.env.NEXT_PUBLIC_TEST}/likes/like`, {
         videoId: id,
       });
       // setLiked(!liked);
@@ -92,7 +92,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
     if (isLoggedIn)
       try {
         const res = await axios.post(
-          "http://localhost:8000/api/v1/subscribe/subscribeTo",
+          `${process.env.NEXT_PUBLIC_TEST}/subscribe/subscribeTo`,
           { channel: data.owner._id }
 
         );

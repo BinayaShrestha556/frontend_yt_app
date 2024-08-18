@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Card from "./Card";
  const getData = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/v1/video/all-videos"
+        `${process.env.NEXT_PUBLIC_TEST}/video/all-videos`
       );
       // console.log(res.data.data);
 

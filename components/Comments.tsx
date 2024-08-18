@@ -17,7 +17,7 @@ export interface Data {
 }
 const getComments = async (id: string): Promise<[Data] | null> => {
   try {
-    const res = await axios.get(`http://localhost:8000/api/v1/comments/${id}`);
+    const res = await axios.get(`${process.env.NEXT_PUBLIC_TEST}/comments/${id}`);
     if (res.data.success) {
       return res.data.data;
     }

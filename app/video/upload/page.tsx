@@ -82,7 +82,7 @@ const Page: React.FC = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/v1/video/upload",
+        `${process.env.NEXT_PUBLIC_TEST}/video/upload`,
         form,
         config
       );

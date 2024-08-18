@@ -7,7 +7,7 @@ import Image from "next/image";
 
 axios.defaults.withCredentials = true;
 const getData = async (id: string) => {
-  const res = await axios.get(`http://localhost:8000/api/v1/video/v/${id}`);
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_TEST}/video/v/${id}`);
   // console.log(res.data);
   if (res.status === 200) {
     return res.data.data;

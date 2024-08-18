@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar_buttons from "./sidebar_buttons";
 import { IoMdHome } from "react-icons/io";
 import { MdOutlineWatchLater, MdSubscriptions } from "react-icons/md";
@@ -11,13 +11,14 @@ import Footer from "./Footer";
 import { RootState } from "@/app/GlobalStates/store";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import Link from "next/link";
+
 const Sidebar = () => {
   const isSideBarOpen=useSelector((state:RootState)=>state.sidebar.isSideBarOpen)
   // const router=useRouter()
   // const {pathname}=router
-  useEffect(()=>{
-    
-  },[])
+  const user=useSelector((state:RootState)=>state.user)
+  const [active,setActive]=useState("Home")
   return (
     <div>
      
@@ -26,39 +27,32 @@ const Sidebar = () => {
       
         <div>
           
-          <Sidebar_buttons bg={true} title={"Home"} icon={<IoMdHome />} />
+        <Link href={`/`}><div onClick={()=>setActive("Home")}><Sidebar_buttons bg={active} title={"Home"} icon={<IoMdHome />} /></div></Link>
         </div>
-        <div>
+        {/* <div>
           <Sidebar_buttons
             bg={false}
             title={"Subscription"}
             icon={<MdSubscriptions />}
           />
-        </div>
+        </div> */}
       </div>
       <hr/>
       <div>
         <div className="px-3 m-2 flex items-center gap-3">You <span className="text-lg font-extralight font-mono">{">"}</span></div>
-        <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-        <Sidebar_buttons bg={false} title={"History"} icon={<FaHistory />} />
-        <Sidebar_buttons bg={false} title={"Liked videos"} icon={<BiSolidLike />} />
-        <Sidebar_buttons bg={false} title={"Playlist"} icon={<BiSolidVideos />} />
-        <Sidebar_buttons bg={false} title={"Watch later"} icon={<MdOutlineWatchLater />} />
-        <Sidebar_buttons bg={false} title={"Your videos"} icon={<RiPlayList2Line />} />
+       <Link href={`/user/${user.username}`}> <div onClick={()=>setActive("Account")}> <Sidebar_buttons bg={active} title={"Account"} icon={<CgProfile/>} /></div></Link>
+        {/* <Sidebar_buttons bg={false} title={"History"} icon={<FaHistory />} /> */}
+        <div onClick={()=>setActive("Liked videos")}><Sidebar_buttons bg={active} title={"Liked videos"} icon={<BiSolidLike />} /></div>
+        {/* <Sidebar_buttons bg={false} title={"Playlist"} icon={<BiSolidVideos />} /> */}
+        {/* <Sidebar_buttons bg={false} title={"Watch later"} icon={<MdOutlineWatchLater />} /> */}
+        <Link href={`/user/${user.username}`}><div onClick={()=>setActive("Your videos")}><Sidebar_buttons bg={active} title={"Your videos"} icon={<RiPlayList2Line />} /></div></Link>
 
       </div>
       <hr />
 <div>
   <div className="px-3 m-2"> Subscriptions</div>
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
-  <Sidebar_buttons bg={false} title={"Account"} icon={<CgProfile/>} />
+  <Sidebar_buttons bg={active} title={"subAccount"} icon={<CgProfile/>} />
+
 
 
 <Footer/>

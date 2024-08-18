@@ -41,7 +41,7 @@ const CommentElement = ({
  
   const deleteComment=async()=>{
     try {
-      const res=await axios.post("http://localhost:8000/api/v1/comments/delete-comment",{commentId:id})
+      const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/comments/delete-comment`,{commentId:id})
       // console.log(res)
       if(res.status==200)
        setDeleted(true)
@@ -53,7 +53,7 @@ const CommentElement = ({
   const likeComment=async()=>{
     try {
       
-      const res=await axios.post("http://localhost:8000/api/v1/likes/like-comment",{commentId:id})
+      const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/likes/like-comment`,{commentId:id})
       // console.log(res)
       if(res.status==200){
        
