@@ -26,7 +26,7 @@ const User = () => {
     e.preventDefault()
     try{
     const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,formData)
-    console.log(response)
+    // console.log(response)
     dispatch(setLoginState(true))
     router.push("/")
   }catch(err){
@@ -39,8 +39,8 @@ const User = () => {
   }
   const handleOnclick=async()=>{
     const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/refresh-access`)
-    if(res)
-      console.log(res)
+    // if(res)
+    //   // console.log(res)
 
 
   }

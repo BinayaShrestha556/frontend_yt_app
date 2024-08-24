@@ -74,7 +74,7 @@ const Navbar = () => {
       const refresh = await axios.post(
         `${process.env.NEXT_PUBLIC_TEST}/user/refresh-access`
       );
-      console.log(refresh.status, " refresh");
+      // console.log(refresh.status, " refresh");
       const data = await getCheckLoginData();
 
       if (data) {
@@ -100,29 +100,31 @@ const Navbar = () => {
   return (
     <div className="w-full fixed bg-black/30 z-50">
       <div className="justify-between flex items-center px-7 py-4 w-full">
-        <div className="left flex gap-6 text-white text-2xl justify-between items-center">
+        <div className="left flex gap-3 tablet:gap-6 text-white text-2xl justify-between items-center">
           <GiHamburgerMenu
             onClick={() => {
               dispatch(setIsSideBarOpen(!isSideBarOpen));
             }}
           />
-          <Link href={"/"}>
-            <span className="text-2xl font-semibold text-white">NewTube</span>
+          <Link className="relative tablet:h-10 h-8 w-28 tablet:w-32" href={"/"}>
+          <Image alt="logo" src="/logo-full-white.png" fill style={{objectFit: "contain"}}/>
+          
+            
           </Link>
         </div>
         <div className="mid w-[40%] flex justify-center">
           <input
             type="text"
-            className="px-4 py-1.5 bg-transparent border border-gray-200/35 rounded-l-full w-[80%]"
+            className="px-4 py-1.5 hidden tablet:block bg-transparent border border-gray-200/35 rounded-l-full w-[80%]"
             placeholder="Search"
           />
-          <button className="w-20 rounded-r-full border-r-[1px] border-t-[1px] border-b-[1px] border-gray-200/35 bg-gray-300/20 flex items-center justify-center text-3xl">
-            <CiSearch />
+          <button className="w-10 tablet:20 rounded-r-full  tablet:border-r-[1px] tablet:border-t-[1px] tablet:border-b-[1px] border-gray-200/35 tablet:bg-gray-300/20 flex items-center justify-center text-3xl tablet:hover:bg-white transition group">
+            <CiSearch className="group-hover:text-black transition" />
           </button>
         </div>
         <div className="right flex justify-center items-center text-[30px] gap-4">
-          <Link href={isLoggedIn ? "/video/upload" : "/user/login"}>
-            <MdVideoCall />
+          <Link className="flex items-center gap-1 tablet:border tablet:py-2 tablet:px-4 rounded-full group transition hover:bg-white" href={isLoggedIn ? "/video/upload" : "/user/login"}>
+            <MdVideoCall className="group-hover:text-black transition"/> <p className="text-sm tablet:inline-block transition hidden  group-hover:text-black">Upload</p>
           </Link>
           <IoMdNotificationsOutline />
           {isLoggedIn ? (
@@ -131,13 +133,14 @@ const Navbar = () => {
                 onClick={handleOnclickLogout}
                 className="w-8 h-8 rounded-full relative overflow-hidden "
               >
-                {" "}
+                {
+                    userInfo.avatar&&
                 <Image
                   src={userInfo.avatar}
                   alt="pfp"
-                  layout="fill"
-                  objectFit="cover"
-                />
+                  fill
+                  style={{objectFit:"cover"}}
+                />}
               </div>
               <p className="hidden group-hover:block text-sm">
                 {userInfo.username}

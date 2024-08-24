@@ -5,6 +5,7 @@ import { FaUpload } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import { MdVideoFile } from "react-icons/md";
 import { CancelTokenSource } from "axios";
+import { useRouter } from "next/navigation";
 
 interface Upload {
   title: string;
@@ -86,7 +87,7 @@ const Page: React.FC = () => {
         form,
         config
       );
-      console.log(res);
+      // console.log(res);
     } catch (error) {
       if (axios.isCancel(error)) {
         console.log('Upload canceled');
@@ -116,7 +117,7 @@ const Page: React.FC = () => {
       setUploadData((prevData) => ({ ...prevData, [name]: value }));
     }
   };
-
+const router=useRouter()
   const handleCancel = () => {
     if (cancelTokenSource.current) {
       cancelTokenSource.current.cancel('Upload canceled by user');
@@ -125,8 +126,8 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="w-full  h-full flex flex-col items-center justify-center mt-10">
-      <form method="post" onSubmit={handleSubmit} className="min-w-1/2 w-[50%] pb-10 flex flex-col items-center gap-3">
+    <div className="w-full  h-full flex flex-col items-center justify-center mt-20">
+      <form method="post" onSubmit={handleSubmit} className="min-w-1/2 tablet:w-[50%] w-full px-3 pb-10 flex flex-col items-center gap-3">
         <input
           type="file"
           name="video"
@@ -139,7 +140,7 @@ const Page: React.FC = () => {
         />
         <p className="text-lg self-start">Video file:</p>
         <div
-          className={`flex w-full min-w-96 rounded-xl bg-white/5 items-center justify-center transition-all ease-in-out duration-700 border-dashed border ${
+          className={`flex w-full  rounded-xl bg-white/5 items-center justify-center transition-all ease-in-out duration-700 border-dashed border ${
             fileStatus.video === "" ? "h-44" : "h-[55px]"
           }`}
           onClick={handleClick1}
@@ -243,6 +244,8 @@ const Page: React.FC = () => {
         </div>
         <p>{Math.ceil(uploadPercentage)}%</p>
         </div>:""}
+        <div className="w-full pb-20">
+        {uploadPercentage===100?<div className="w-full py-2 text-center rounded bg-green-500 text-white font-bold" onClick={()=>router.push("/")}> success</div>:
         <div className=" flex w-full gap-7 ">
         <button
           type="submit"
@@ -259,7 +262,8 @@ const Page: React.FC = () => {
           className="bg-red-500 py-1.5 rounded-full w-full max-w-96 "
         >
           Cancel Upload
-        </button></div>
+        </button>
+        </div>}</div>
       </form>
     </div>
   );

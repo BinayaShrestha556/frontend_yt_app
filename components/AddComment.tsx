@@ -20,7 +20,7 @@ const AddComment = ({id,parent}:{id:string,parent:string|null}) => {
         setLoading(false)
         return}
       try{
-        console.log(id,comment,parent)
+        // console.log(id,comment,parent)
         const data={
           video:id,
           content:comment,
@@ -28,7 +28,7 @@ const AddComment = ({id,parent}:{id:string,parent:string|null}) => {
         }
         const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/comments/post-comment`,data)
         if(res.data.statusCode==200){
-          console.log("success")
+          // console.log("success")
           setAddedComment([...addedComment,comment])
           setLoading(false)
 
@@ -44,7 +44,7 @@ const AddComment = ({id,parent}:{id:string,parent:string|null}) => {
       <div className="w-full gap-2 flex">
           <div className="relative w-9 h-8 rounded-full overflow-hidden">{
               user&&
-          <Image alt='user pfp' src={user.avatar} layout='fill' objectFit='cover' />}
+          <Image alt='user pfp' src={user.avatar} fill style={{objectFit: "contain"}} />}
 
           </div>
         <input type="text" value={comment} onChange={(e)=>setComment(e.target.value)} placeholder="Add comment" className="w-full py-1.5 px-3 rounded-full border bg-transparent" />

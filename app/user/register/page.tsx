@@ -64,14 +64,14 @@ const page = () => {
     form.append("coverImage",formData.coverImage )
   try{
     const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/register`,form)
-    console.log(
-      res
-    )
+    // console.log(
+    //   res
+    // )
     if(res.status==201)
     {
       try{
         const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,{username:formData.username,password:formData.password})
-        console.log(response)
+        // console.log(response)
         dispatch(setLoginState(true))
         router.push("/")
     }

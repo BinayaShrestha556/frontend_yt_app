@@ -14,9 +14,6 @@ const getData = async (id: string) => {
   }
 };
 
-const handleSubscribe = () => {
-  console.log("hello is my boi");
-};
 
 interface Params {
   params: {

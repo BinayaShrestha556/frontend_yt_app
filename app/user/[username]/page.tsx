@@ -24,7 +24,7 @@ axios.defaults.withCredentials=true
 const getUserData=async(username:string):Promise<data|null>=>{
  try {
    const data=await axios.get(`${process.env.NEXT_PUBLIC_TEST}/user/channel/${username}`)
-   console.log
+  
    if(data.data.statusCode===200)
    return data.data.data
   return null
@@ -40,7 +40,7 @@ const getVideoData = async (username:string) => {
     const res = await axios.get(
       `${process.env.NEXT_PUBLIC_TEST}/video/uname/${username}`
     );
-    console.log(res.data.data);
+    
 
     return res.data.data;
   } catch (error) {
@@ -79,12 +79,12 @@ const page = ({params}:Params) => {
          { userData&&<Image src={userData.coverImage} placeholder='blur' blurDataURL={userData.avatar} alt='coverimage' fill objectFit='cover'/>}
 
         </div>
-        <div className="flex gap-3 w-full">
-        <div className='h-32 w-32 relative rounded-full overflow-hidden'>
+        <div className="flex gap-3 w-full p-3">
+        <div className='h-28 w-28 tablet:h-32 tablet:w-32 relative rounded-full overflow-hidden'>
          { userData&&(<Image src={userData.avatar}  alt='pfp' fill objectFit='cover'/> )}
         </div>
          {userData&&(<div className=''>
-          <p className='text-3xl font-bold '>{userData.fullname}</p>
+          <p className='text-2xl tablet:text-3xl font-bold '>{userData.fullname}</p>
 
           <p className='text-gray-500 '>{userData.username}</p>
           <div className='flex text-gray-500'>
@@ -103,11 +103,11 @@ const page = ({params}:Params) => {
 
         </div>
         <hr className="w-full" />
-        { videoData &&<div className='grid grid-cols-4'>
+        { videoData&&userData &&<div className='grid gap-x-3 gap-y-10 grid-cols-1 tablet:grid-cols-3 laptop:grid-cols-4 desktop:grid-cols-5  pb-24 p-2'>
           {
             videoData.map((e:any,i:number)=>(
               <Card
-              avatar={e.owner.avatar}
+              avatar={userData.avatar}
               thumbnail={e.thumbnail}
               time={e.createdAt}
               title={e.title}

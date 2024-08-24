@@ -39,6 +39,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const[copy,setCopy]=useState("share")
 
   const getData = async (): Promise<Data | null> => {
     axios.defaults.withCredentials = true;
@@ -81,8 +82,11 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
       await axios.post(`${process.env.NEXT_PUBLIC_TEST}/likes/like`, {
         videoId: id,
       });
-      // setLiked(!liked);
+      if(liked      )
+        setLikes((prevLikes) => prevLikes - 1);
+      else
       setLikes((prevLikes) => prevLikes + 1);
+      setLiked((current)=>!current);
     } catch (error) {
       alert(error);
       console.log(error);
@@ -105,22 +109,21 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
       }
   };
   return (
-    <div className="w-full flex gap-6 mt-2 rounded-xl p-3">
+    <div className="w-full flex gap-6 mt-2 rounded-xl p-3 flex-wrap-reverse">
       <div className="flex items-center gap-3">
         <div className="rounded-full overflow-hidden w-12 relative h-12">
           <Image
             src={data.owner.avatar}
             alt="pfp"
-            layout="fill"
-            objectFit="cover"
+           fill
+           
+            style={{objectFit: "contain"}}
           />{" "}
         </div>
         <div>
           <p className="font-semibold text-lg">{data.owner.username}</p>
           <p className="text-base text-gray-300">{data.owner.subscribersCount} subs</p>
         </div>
-      </div>
-      <div className="flex items-center gap-4">
         <Button
           onClickFn={handleSubscribe}
           styles={`rounded-full px-5 py-2   h-fit  font-bold ${
@@ -131,15 +134,19 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
         >
         {isSubscribed?"Subscribed":"Subscribe"}
         </Button>
+      </div>
+      <div className="flex items-center gap-4">
+        
         <div className=" bg-white/20 flex text-xl py-2 px-6 rounded-full gap-2 items-center">
           <div className="cursor-pointer " onClick={handleLike}>
-            {false ? <AiFillLike /> : <AiOutlineLike />}
+            {liked ? <AiFillLike /> : <AiOutlineLike />}
           </div>
           <p className="text-sm">{likes}</p>
           |
           <AiOutlineDislike />
         </div>
-        <button className="text-white bg-white/30 py-1.5 px-3 rounded-full text text-sm font-semibold flex items-center gap-1.5 "  onClick={()=>{navigator.clipboard.writeText(`http://localhost:3000/video/${id}`)}}><FaShare  />Share</button>
+        <button className="text-white bg-white/30 py-2 px-3 rounded-full text text-sm font-semibold flex items-center gap-1.5 "  onClick={()=>{navigator.clipboard.writeText(`http://localhost:3000/video/${id}`);setCopy("link copied")}}><FaShare className="text-2xl" />{copy}</button>
+      
       </div>
     </div>
   );
