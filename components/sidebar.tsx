@@ -16,6 +16,7 @@ import { setIsSideBarOpen } from "@/app/GlobalStates/Features/sidebarSlice";
 import Link from "next/link";
 import axios from "axios";
 import SubsImage from "./SubsImage";
+import { link } from "fs";
 interface subscriptions{
   
     _id: string
@@ -149,12 +150,13 @@ useEffect(() => {
           <div className="px-3 m-2"> Subs</div>
          {
           data?.map((e,i)=>(
+            <Link href={`/user/${e.channel.username}`} key={i}>
             <Sidebar_buttons
             key={i}
             bg={active}
             title={e.channel.username}
             icon={<SubsImage avatar={e.channel.avatar}/>}
-          />
+          /></Link>
           ))
          }
 

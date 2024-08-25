@@ -39,13 +39,13 @@ const truncate =(string:string)=>{
           alt="thumbnail"
           src={thumbnail}
           fill
-          style={{objectFit: "contain"}}
+          style={{objectFit: "cover"}}
         />
       </div>
       <div className="flex w-full gap-2">
         <div className="w-10">
           <div className="w-10 aspect-square relative overflow-hidden rounded-full bg-gray-500 mt-1">
-            <Image alt="user" src={avatar} 	sizes="(max-width: 500px) 100vw, 33vw" fill style={{objectFit: "contain"}} />
+            <Image alt="user" src={avatar} 	sizes="(max-width: 500px) 100vw, 33vw" fill style={{objectFit: "cover"}} />
           </div>
         </div>
         <div className="flex-grow">

@@ -10,7 +10,7 @@ import Card from "./Card";
 
       return res.data.data;
     } catch (error) {
-      alert("error while fetching videos");
+     
       console.log(error);
     }
   };

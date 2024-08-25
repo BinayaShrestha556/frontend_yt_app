@@ -35,7 +35,7 @@ const Comments = async ({ id }: { id: string }) => {
       <div className="w-full mt-2">
         {comments
           ? comments.map((e: Data, i: number) => (
-              <div className="w-full mb-2 rounded-lg ">
+              <div className="w-full mb-2 rounded-lg " key={i}>
                 <CommentElement
                   isReply={false}
                   replies={e.replies}
