@@ -38,7 +38,7 @@ const Page = () => {
 
   }
   const handleOnclick=async()=>{
-    const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/refresh-access`)
+   router.push("/user/register")
     // if(res)
     //   // console.log(res)
 

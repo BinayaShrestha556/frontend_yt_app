@@ -53,7 +53,7 @@ const Page = () => {
       alert("Password dont match")
       return
     }
-    if (!formData.avatar) return
+    if (!formData.avatar) {alert("pfp needed");return}
 
     form.append("username",formData.username)
     form.append("password",formData.password)
@@ -63,26 +63,28 @@ const Page = () => {
     if(formData.coverImage)
     form.append("coverImage",formData.coverImage )
   try{
+    console.log(form)
     const res=await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/register`,form)
     // console.log(
     //   res
     // )
-    if(res.status==201)
+    if(res.data.statusCode==200)
     {
-      try{
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,{username:formData.username,password:formData.password})
-        // console.log(response)
-        dispatch(setLoginState(true))
-        router.push("/")
-    }
-    catch(error){
-      console.log(error, " login error")
+    //   try{
+    //     const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,{username:formData.username,password:formData.password})
+    //     // console.log(response)
+    //     dispatch(setLoginState(true))
+    //     router.push("/")
+    // }
+    // catch(error){
+    //   console.log(error, " login error")
       
-    }
+    // }
+    router.push("/user/login")
   }
   }catch(error:any){
     console.log(error)
-    alert(error.response.data.message)
+    // alert(error.response.data.message)
   }
 
 
@@ -116,7 +118,7 @@ const Page = () => {
             <input type="file" name="coverImage" placeholder="Cover image" onChange={onChange} className="w-full px-4 py-1.5 rounded-lg " />
         </div>
         <div className="flex justify-around">
-          <button className="text-white px-4 py-1.5 rounded-full w-[30%] bg-green-500">register</button><button type="button" className="text-green-500 px-4 py-1.5 rounded-full bg-transparent underline">I have an account</button>
+          <button type="submit" className="text-white px-4 py-1.5 rounded-full w-[30%] bg-green-500">register</button><button type="button" className="text-green-500 px-4 py-1.5 rounded-full bg-transparent underline">I have an account</button>
 
         </div>
 
