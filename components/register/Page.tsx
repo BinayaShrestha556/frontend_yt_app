@@ -18,6 +18,7 @@ interface form {
 const Page = () => {
   const router=useRouter()
   const dispatch=useDispatch()
+  const [loading,setLoading]=useState(false)
   const [formData, setFormData] = useState<form>({
     username: "",
     password: "",
@@ -48,12 +49,19 @@ const Page = () => {
   
   const submitForm =async(e:any)=>{
     e.preventDefault()
+    setLoading(true)
     const form=new FormData();
-    if(formData.password!=formData.conformPassword){
-      alert("Password dont match")
+    if(!formData.username||!formData.fullname||!formData.email||!formData.password){
+      alert("all field required")
+      setLoading(false)
       return
     }
-    if (!formData.avatar) {alert("pfp needed");return}
+    if(formData.password!=formData.conformPassword){
+      alert("Password dont match")
+      setLoading(false)
+      return
+    }
+    if (!formData.avatar) {alert("pfp needed");setLoading(false);return}
 
     form.append("username",formData.username)
     form.append("password",formData.password)
@@ -70,17 +78,18 @@ const Page = () => {
     // )
     if(res.data.statusCode==200)
     {
-    //   try{
-    //     const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,{username:formData.username,password:formData.password})
-    //     // console.log(response)
-    //     dispatch(setLoginState(true))
-    //     router.push("/")
-    // }
-    // catch(error){
-    //   console.log(error, " login error")
+      try{
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,{username:formData.username,password:formData.password})
+        // console.log(response)
+        dispatch(setLoginState(true))
+        window.location.replace("https://localhost:3000")
+       
+    }
+    catch(error){
+      console.log(error, " login error")
       
-    // }
-    router.push("/user/login")
+    }
+    // router.push("/user/login")
   }
   }catch(error:any){
     console.log(error)
@@ -90,8 +99,8 @@ const Page = () => {
 
   }
   return ( 
-  <div className="flex justify-center items-center w-full h-full -mt-20">
-    <form action="submit"className=" flex flex-col gap-4 w-[40%]" onSubmit={submitForm} method="post">
+  <div className="flex justify-center items-center w-full h-[800px] -mt-20">
+    <form action="submit"className=" flex flex-col gap-4 w-[90%] tablet:w-[50%]" onSubmit={submitForm} method="post">
     
             
             <input type="text" name="fullname" placeholder="Full Name" onChange={onChange} className="w-full px-4 py-1.5 rounded-lg bg-transparent border border-white focus:border-green-500" />
@@ -113,9 +122,8 @@ const Page = () => {
             <label  className="block     text-white">profile picture</label>
             <input type="file" name="avatar" placeholder="Profile pic" onChange={onChange} className="w-full px-4 py-1.5 rounded-lg " />
         </div>
-        <div>
-            <label  className="block text-white">cover image</label>
-            <input type="file" name="coverImage" placeholder="Cover image" onChange={onChange} className="w-full px-4 py-1.5 rounded-lg " />
+        <div className="m-auto">{loading&&
+           <div className="h-10 w-10 rounded-full border-l-green-400 border-t-red-500 border-2 border-b-0 animate-spin"></div>}
         </div>
         <div className="flex justify-around">
           <button type="submit" className="text-white px-4 py-1.5 rounded-full w-[30%] bg-green-500">register</button><button type="button" className="text-green-500 px-4 py-1.5 rounded-full bg-transparent underline">I have an account</button>

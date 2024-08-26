@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux'
 
 const Page = () => {
   // axios.defaults.withCredentials=true
+  const [loading,setLoading]=useState(false)
+
   const [formData,setFormData]=useState({
     username:"",
     password:""
@@ -23,14 +25,17 @@ const Page = () => {
 
   }
   const login=async(e:any)=>{
+    setLoading(true)
     e.preventDefault()
     try{
     const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,formData)
     // console.log(response)
     dispatch(setLoginState(true))
-    router.push("/")
-  }catch(err){
+    window.location.replace("https://localhost:3000")
+  }catch(err:any){
+    alert(err.response.data.message)
     console.log(err)
+    setLoading(false)
   }
 
 
@@ -47,7 +52,7 @@ const Page = () => {
   
   return (
     <div className='w-full h-full  flex justify-center items-center -mt-20'>
-      <form action="submit" onSubmit={login} className='flex flex-col gap-6 w-[20%]' method="post">
+      <form action="submit" onSubmit={login} className='flex flex-col gap-6 w-[60%] laptop:w-[30%]' method="post">
         <div>
         
           <input type="text" onChange={onChange} className='bg-transparent rounded border-[1px] border-white px-3 py-1.5 w-full ' placeholder='username' name="username" id="" />
@@ -59,7 +64,12 @@ const Page = () => {
       <div className='flex justify-around '>
       <button type='submit' className='px-4 py-1.5  rounded-full bg-green-500'>submit</button>
       <button type='button' onClick={handleOnclick} className='px-4 py-1.5 rounded-full text-green-500 underline'>register</button>
+
 </div>
+<div className="m-auto">{loading&&
+           <div className="h-10 w-10 rounded-full border-l-green-400 border-t-red-500 border-2 border-b-0 animate-spin"></div>}
+        </div>
+
       
 
       </form>
