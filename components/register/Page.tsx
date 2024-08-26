@@ -82,7 +82,7 @@ const Page = () => {
         const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,{username:formData.username,password:formData.password})
         // console.log(response)
         dispatch(setLoginState(true))
-        window.location.replace("https://localhost:3000")
+        window.location.replace("https://newtubebybinaya.vercel.app")
        
     }
     catch(error){
