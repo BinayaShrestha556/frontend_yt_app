@@ -21,9 +21,18 @@ interface FileStatus {
 
 const Page: React.FC = () => {
   axios.defaults.withCredentials = true;
+  async function getSignature() {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_TEST}/video/signature`
+    );
+
+    return response.data.data;
+  }
   const videoInputRef = useRef<HTMLInputElement | null>(null);
   const thumbnailInputRef = useRef<HTMLInputElement | null>(null);
   const cancelTokenSource = useRef<CancelTokenSource | null>(null); // Ref for cancel token
+  const [videoUrl, setVideoUrl] = useState("");
+  const [videoDuration, setVideoDuration] = useState(0);
 
   const [uploadData, setUploadData] = useState<Upload>({
     title: "",
@@ -62,40 +71,77 @@ const Page: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const { video, thumbnail, title, description } = uploadData;
-    const form = new FormData();
+  
     if (!video || !thumbnail || !title || !description) return;
-
-    form.append("video", video);
-    form.append("thumbnail", thumbnail);
-    form.append("title", title);
-    form.append("description", description);
-
-    // Create a new CancelToken source
     cancelTokenSource.current = axios.CancelToken.source();
-
     const config = {
       onUploadProgress: function (progressEvent: AxiosProgressEvent) {
-        const percentCompleted = (progressEvent.loaded / progressEvent.total!) * 100;
+        const percentCompleted =
+          (progressEvent.loaded / progressEvent.total!) * 100;
         setUploadPercentage(Math.ceil(percentCompleted));
       },
       cancelToken: cancelTokenSource.current.token,
+      withCredentials: false,
     };
-
+    const config2 = {
+      onUploadProgress: function (progressEvent: AxiosProgressEvent) {
+        const percentCompleted =
+          (progressEvent.loaded / progressEvent.total!) * 100;
+        setUploadPercentage(Math.ceil(percentCompleted));
+      },
+      cancelToken: cancelTokenSource.current.token,
+      
+    };
+  
+    const { timestamp, signature } = await getSignature();
+    const formData = new FormData();
+    const api_key = process.env.NEXT_PUBLIC_API_KEY;
+    formData.append("file", video);
+    if (api_key) formData.append("api_key", api_key);
+    formData.append("timestamp", timestamp);
+    formData.append("signature", signature);
+    formData.append("upload_preset", "ml_default");
+  
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_TEST}/video/upload`,
-        form,
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/video/upload`,
+        formData,
         config
       );
-      // console.log(res);
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        console.log('Upload canceled');
-      } else {
-        console.error('Upload error:', error);
+      const url = response.data.secure_url;
+      const duration = response.data.duration;
+      
+      // Set the video URL and duration after receiving a successful response
+      setVideoUrl(url);
+      setVideoDuration(duration);
+      setUploadPercentage(0);
+  
+      // Now that videoUrl and videoDuration are set, proceed with the second request
+      const form = new FormData();
+      form.append("videoUrl", url); // Use the URL from the Cloudinary response
+      form.append("thumbnail", thumbnail);
+      form.append("title", title);
+      form.append("description", description);
+      form.append("duration", duration.toString()); // Use the duration from the Cloudinary response
+  
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_TEST}/video/upload`,
+          form,config2
+        );
+        console.log(res.data); // Log the response from your backend
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          console.log("Upload canceled");
+        } else {
+          console.error("Upload error:", error);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
   };
+  
 
   const handleChange = (e: any) => {
     const { type, name, value, files } = e.target;
@@ -117,17 +163,21 @@ const Page: React.FC = () => {
       setUploadData((prevData) => ({ ...prevData, [name]: value }));
     }
   };
-const router=useRouter()
+  const router = useRouter();
   const handleCancel = () => {
     if (cancelTokenSource.current) {
-      cancelTokenSource.current.cancel('Upload canceled by user');
-      setUploadPercentage(0)
+      cancelTokenSource.current.cancel("Upload canceled by user");
+      setUploadPercentage(0);
     }
   };
 
   return (
     <div className="w-full  h-full flex flex-col items-center justify-center mt-20">
-      <form method="post" onSubmit={handleSubmit} className="min-w-1/2 tablet:w-[50%] w-full px-3 pb-10 flex flex-col items-center gap-3">
+      <form
+        method="post"
+        onSubmit={handleSubmit}
+        className="min-w-1/2 tablet:w-[50%] w-full px-3 pb-10 flex flex-col items-center gap-3"
+      >
         <input
           type="file"
           name="video"
@@ -166,7 +216,7 @@ const router=useRouter()
                 }}
               >
                 <span>Remove</span>
-                <ImCross className="group-hover:rotate-90 transition"/>
+                <ImCross className="group-hover:rotate-90 transition" />
               </button>
             </>
           )}
@@ -204,8 +254,14 @@ const router=useRouter()
                 className="ml-[10%] flex items-center gap-2 bg-red-500 hover:scale-105 rounded py-0.5 px-2"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setFileStatus((prevStatus) => ({ ...prevStatus, thumbnail: "" }));
-                  setUploadData((prevData) => ({ ...prevData, thumbnail: null }));
+                  setFileStatus((prevStatus) => ({
+                    ...prevStatus,
+                    thumbnail: "",
+                  }));
+                  setUploadData((prevData) => ({
+                    ...prevData,
+                    thumbnail: null,
+                  }));
                 }}
               >
                 <span>Remove</span>
@@ -234,36 +290,49 @@ const router=useRouter()
             required
           />
         </div>
-        {uploadPercentage!==0?
-        <div className="w-full">
-        <div className="w-full h-2 bg-white rounded-full overflow-hidden">
-          <div
-            className="h-full bg-red-500"
-            style={{ width: `${uploadPercentage}%` }}
-          ></div>
-        </div>
-        <p>{Math.ceil(uploadPercentage)}%</p>
-        </div>:""}
+        {uploadPercentage !== 0 ? (
+          <div className="w-full">
+            <div className="w-full h-2 bg-white rounded-full overflow-hidden">
+              <div
+                className="h-full bg-red-500"
+                style={{ width: `${uploadPercentage}%` }}
+              ></div>
+            </div>
+            <p>{Math.ceil(uploadPercentage)}%</p>
+          </div>
+        ) : (
+          ""
+        )}
         <div className="w-full pb-20">
-        {uploadPercentage===100?<div className="w-full py-2 text-center rounded bg-green-500 text-white font-bold" onClick={()=>router.push("/")}> success</div>:
-        <div className=" flex w-full gap-7 ">
-        <button
-          type="submit"
-          className="bg-green-500 py-1.5 rounded-full w-full max-w-96"
-        >
-          Upload{" "}
-          <span className="inline-block">
-            <FaUpload />
-          </span>
-        </button>
-        <button
-          type="button"
-          onClick={handleCancel}
-          className="bg-red-500 py-1.5 rounded-full w-full max-w-96 "
-        >
-          Cancel Upload
-        </button>
-        </div>}</div>
+          {uploadPercentage === 100 ? (
+            <div
+              className="w-full py-2 text-center rounded bg-green-500 text-white font-bold"
+              onClick={() => router.push("/")}
+            >
+              {" "}
+              success
+            </div>
+          ) : (
+            <div className=" flex w-full gap-7 ">
+              <button
+                type="submit"
+                className="bg-green-500 py-1.5 rounded-full w-full max-w-96"
+              >
+                Upload{" "}
+                <span className="inline-block">
+                  <FaUpload />
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={handleCancel}
+                className="bg-red-500 py-1.5 rounded-full w-full max-w-96 "
+              >
+                Cancel Upload
+              </button>
+            </div>
+          )}
+        </div>
       </form>
     </div>
   );

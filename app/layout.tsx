@@ -29,7 +29,7 @@ export default function RootLayout({
       <Providers>
           <Navbar />
           <div className="flex mt-20 h-full w-full">
-            <div className="h-full relative "></div>
+            <div className="h-full  relative "></div>
             <Sidebar />
             <div className="h-full flex-grow overflow-y-scroll">{children}</div>
           </div>

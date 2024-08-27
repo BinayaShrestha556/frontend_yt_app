@@ -4,7 +4,12 @@ import Card from "./Card";
  const getData = async () => {
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_TEST}/video/all-videos`
+        `${process.env.NEXT_PUBLIC_TEST}/video/all-videos`,
+   {headers: {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+  },}
       );
       // console.log(res.data.data);
 
