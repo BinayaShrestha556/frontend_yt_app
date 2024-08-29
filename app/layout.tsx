@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/sidebar";
 import { Providers } from "./GlobalStates/provider";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,13 +26,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <body className=" flex flex-col  w-full h-screen overflow-y-hidden">
+        <body className=" flex flex-col h-screen overflow-hidden w-full ">
       <Providers>
           <Navbar />
-          <div className="flex mt-20 h-full w-full">
-            <div className="h-full  relative "></div>
+          <div className="flex    w-full overflow-hidden">
+            <div className="h-full  relative overfloe-hidden "></div>
             <Sidebar />
-            <div className="h-full flex-grow overflow-y-scroll">{children}</div>
+            <div className="h-[90dvh] mt-20 flex-grow overflow-y-scroll"><div>{children}<Footer/></div>
+              
+            </div>
+          
           </div>
       </Providers>
         </body>

@@ -85,7 +85,7 @@ useEffect(() => {
   return (
     <div>
       <div
-        className={`bg-gray-400/5 tablet:px-3   flex-col left-0 hover:overflow-y-scroll h-screen overflow-hidden transition-all ${
+        className={`bg-gray-400/5 tablet:px-3 mt-20  flex-col left-0 hover:overflow-y-scroll h-screen overflow-hidden transition-all ${
           isSideBarOpen ? " opacity-100 " : "w-0 opacity-0 "
         } `}
       >
