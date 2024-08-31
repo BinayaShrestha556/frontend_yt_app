@@ -38,12 +38,14 @@ const Sidebar = () => {
   // const router=useRouter()
   // const {pathname}=router
   const user = useSelector((state: RootState) => state.user);
+  const isLoggedIn=useSelector((state:RootState)=>state.isLoggedIn.isLoggedIn)
   const [active, setActive] = useState("Home");
 const [data,setData]=useState<subscriptions[]|null>(null)
 // const [data, setData] = useState<subscriptions[] | null>(null);
 
 const getSubscriptions = async (): Promise<subscriptions[] | null> => {
   try {
+    if(!isLoggedIn) return null
     const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/subscribe/subscriptions`);
     if (response.status === 200) {
       return response.data.data;
@@ -80,7 +82,7 @@ useEffect(() => {
 
   return () => {
     window.removeEventListener("resize", handleResize);
-  }}, []);
+  }}, [isLoggedIn]);
 
   return (
     <div>

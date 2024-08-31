@@ -12,8 +12,8 @@ const Fyp = async () => {
   const data = await getData();
   // console.log(data)
   return (
-    <div className="grid gap-x-3 gap-y-10 grid-cols-1 tablet:grid-cols-3 laptop:grid-cols-4 desktop:grid-cols-5  p-2">
-      {data&& data.map((e: any, i: any) => (
+   <> {data?<div className="grid gap-x-3 h- gap-y-10 w-full grid-cols-1 tablet:grid-cols-3 laptop:grid-cols-4 desktop:grid-cols-5  p-2">
+      { data.map((e: any, i: any) => (
         <Card
           avatar={e.owner.avatar}
           thumbnail={e.thumbnail}
@@ -25,7 +25,7 @@ const Fyp = async () => {
           key={i}
         />
       ))}
-    </div>
+    </div>:<div className="h-[98vh] m-auto flex items-center justify-center text-xl font-bold -mt-20"><p className="m-auto">No Videos To Show</p></div>}</>
   );
 };
 export default Fyp;

@@ -45,6 +45,7 @@ const Navbar = () => {
 
   const handleOnclickLogout = async () => {
     try {
+      if(!isLoggedIn)return
       await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/logout`);
       // Update Redux state
       dispatch(setLoginState(false));
@@ -57,6 +58,7 @@ const Navbar = () => {
   };
   const getCheckLoginData = async (): Promise<user | null> => {
     try {
+      
       const loginUser = await axios.post(
         `${process.env.NEXT_PUBLIC_TEST}/user/current-user`
       );
@@ -99,8 +101,8 @@ const Navbar = () => {
 
   return (
     <div className="w-full fixed bg-black/30 z-50">
-      <div className="justify-between flex items-center px-7 py-4 w-full">
-        <div className="left flex gap-3 tablet:gap-6 text-white text-2xl justify-between items-center">
+      <div className="justify-between flex items-center px-3 tablet:px-7 py-4 w-full">
+        <div className="left flex gap-[5%] tablet:gap-6 text-white text-2xl justify-between items-center">
           <GiHamburgerMenu
             onClick={() => {
               dispatch(setIsSideBarOpen(!isSideBarOpen));
@@ -112,14 +114,14 @@ const Navbar = () => {
             
           </Link>
         </div>
-        <div className="mid w-[40%] flex justify-center">
+        <div className="mid tablet:w-[40%] flex-grow tablet:flex-grow-0  flex justify-end tablet:justify-center">
           <input
             type="text"
             className="px-4 py-1.5 hidden tablet:block bg-transparent border border-gray-200/35 rounded-l-full w-[80%]"
             placeholder="Search"
           />
-          <button className="w-10 tablet:20 rounded-r-full  tablet:border-r-[1px] tablet:border-t-[1px] tablet:border-b-[1px] border-gray-200/35 tablet:bg-gray-300/20 flex items-center justify-center text-3xl tablet:hover:bg-white transition group">
-            <CiSearch className="group-hover:text-black transition" />
+          <button className="text-white text-3xl tablet:border tablet:border-gray-200/35 tablet:border-l-0   tablet:bg-white/10 py-1.5 tablet:hover:bg-white/80  rounded-r-full px-2 tablet:px-6 transition group">
+            <CiSearch className="tablet:group-hover:text-black transition" />
           </button>
         </div>
         <div className="right flex justify-center items-center text-[30px] gap-4">
