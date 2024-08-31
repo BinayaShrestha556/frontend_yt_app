@@ -51,7 +51,7 @@ const Page = () => {
   }
   
   return (
-    <div className='w-full h-full  flex justify-center items-center -mt-20'>
+    <div className='w-full h-screen flex justify-center items-center -mt-20'>
       <form action="submit" onSubmit={login} className='flex flex-col gap-6 w-[60%] laptop:w-[30%]' method="post">
         <div>
         
