@@ -31,7 +31,7 @@ const Page = () => {
     const response = await axios.post(`${process.env.NEXT_PUBLIC_TEST}/user/login`,formData)
     // console.log(response)
     dispatch(setLoginState(true))
-    window.location.replace("https://newtubebybinaya.vercel.app")
+    // window.location.replace("https://newtubebybinaya.vercel.app")
   }catch(err:any){
     alert(err.response.data.message)
     console.log(err)
