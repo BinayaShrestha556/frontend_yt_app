@@ -12,7 +12,7 @@ const Fyp = async () => {
   const data = await getData();
   // console.log(data)
   return (
-   <> {data?<div className="grid gap-x-3 h- gap-y-10 w-full grid-cols-1 tablet:grid-cols-3 laptop:grid-cols-4 desktop:grid-cols-5  p-2">
+   <> {data?<div className="grid gap-x-3 min-h-[80vh] gap-y-10 w-full grid-cols-1 tablet:grid-cols-3 laptop:grid-cols-4 desktop:grid-cols-5  p-2">
       { data.map((e: any, i: any) => (
         <Card
           avatar={e.owner.avatar}

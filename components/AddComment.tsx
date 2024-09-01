@@ -12,9 +12,11 @@ const AddComment = ({id,parent}:{id:string,parent:string|null}) => {
   axios.defaults.withCredentials=true
     const[comment,setComment]=useState("")
     const user = useSelector((state:RootState)=>state.user)
+    const isLoggedIn=useSelector((state:RootState)=>state.isLoggedIn.isLoggedIn)
     const [addedComment,setAddedComment]=useState<string[]>([])
     const [loading,setLoading]=useState(false)
     const handleSubmit=async()=>{
+      if(!isLoggedIn) { alert("please login or sign up");return}
       setLoading(true)
       if(comment.trim()==""||null||undefined) {
         setLoading(false)

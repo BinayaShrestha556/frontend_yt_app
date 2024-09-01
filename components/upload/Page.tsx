@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 interface Upload {
   title: string;
-  thumbnail: File | null;
+  
   video: File | null;
   description: string;
 }
@@ -33,10 +33,11 @@ const Page: React.FC = () => {
   const cancelTokenSource = useRef<CancelTokenSource | null>(null); // Ref for cancel token
   const [videoUrl, setVideoUrl] = useState("");
   const [videoDuration, setVideoDuration] = useState(0);
+  
 
   const [uploadData, setUploadData] = useState<Upload>({
     title: "",
-    thumbnail: null,
+
     video: null,
     description: "",
   });
@@ -70,9 +71,9 @@ const Page: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { video, thumbnail, title, description } = uploadData;
+    const { video, title, description } = uploadData;
   
-    if (!video || !thumbnail || !title || !description) return;
+    if (!video|| !title || !description) return;
     cancelTokenSource.current = axios.CancelToken.source();
     const config = {
       onUploadProgress: function (progressEvent: AxiosProgressEvent) {
@@ -110,16 +111,18 @@ const Page: React.FC = () => {
       );
       const url = response.data.secure_url;
       const duration = response.data.duration;
+      const thumbnailUrl=url.replace(/\.[^/.]+$/, '.jpg');
       
       // Set the video URL and duration after receiving a successful response
       setVideoUrl(url);
       setVideoDuration(duration);
+      
       setUploadPercentage(0);
   
       // Now that videoUrl and videoDuration are set, proceed with the second request
       const form = new FormData();
       form.append("videoUrl", url); // Use the URL from the Cloudinary response
-      form.append("thumbnail", thumbnail);
+      form.append("thumbnail", thumbnailUrl);
       form.append("title", title);
       form.append("description", description);
       form.append("duration", duration.toString()); // Use the duration from the Cloudinary response
@@ -221,7 +224,7 @@ const Page: React.FC = () => {
             </>
           )}
         </div>
-        <input
+        {/* <input
           type="file"
           name="thumbnail"
           id="thumbnail"
@@ -230,8 +233,8 @@ const Page: React.FC = () => {
           onChange={handleChange}
           accept="image/*"
           required
-        />
-        <p className="text-lg self-start">Thumbnail: (required)</p>
+        /> */}
+        {/* <p className="text-lg self-start">Thumbnail: (required)</p>
         <div
           className={`flex w-full rounded-xl bg-white/5 p-2 items-center justify-center transition-all ease-in-out duration-700 border-dashed border ${
             fileStatus.thumbnail === "" ? "h-44" : "h-[55px]"
@@ -260,7 +263,7 @@ const Page: React.FC = () => {
                   }));
                   setUploadData((prevData) => ({
                     ...prevData,
-                    thumbnail: null,
+                    thumbnail: "",
                   }));
                 }}
               >
@@ -269,7 +272,7 @@ const Page: React.FC = () => {
               </button>
             </>
           )}
-        </div>
+        </div> */}
         <div className="w-full">
           <label className="block my-2 text-lg">Title</label>
           <textarea

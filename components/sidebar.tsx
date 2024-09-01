@@ -150,7 +150,7 @@ useEffect(() => {
         <hr />
         <div>
           <div className="px-3 m-2"> Subs</div>
-         {
+         {isLoggedIn?
           data?.map((e,i)=>(
             <Link href={`/user/${e.channel.username}`} key={i}>
             <Sidebar_buttons
@@ -159,7 +159,7 @@ useEffect(() => {
             title={e.channel.username}
             icon={<SubsImage avatar={e.channel.avatar}/>}
           /></Link>
-          ))
+          )):<Link href={"/user/login"} className="w-full"><div  className="px-3 py-1.5 w-fit m-auto rounded border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white cursor-pointer font-bold">login</div></Link>
          }
 
         </div>
