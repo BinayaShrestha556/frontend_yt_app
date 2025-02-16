@@ -33,7 +33,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
     (state: RootState) => state.isLoggedIn.isLoggedIn
   );
   axios.defaults.withCredentials = true;
-  axios.defaults.withCredentials = true;
+
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Data | null>(null);
   const [liked, setLiked] = useState(false);
@@ -72,7 +72,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
     fetchData();
   }, [id]);
 
-  if (loading || !data) {
+  if (loading ) {
     return <p>Loading...</p>;
   }
 
@@ -97,7 +97,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
       try {
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_TEST}/subscribe/subscribeTo`,
-          { channel: data.owner._id }
+          { channel: data?.owner._id }
 
         );
      
@@ -113,7 +113,7 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
       <div className="flex items-center gap-3">
         <div className="rounded-full overflow-hidden w-12 relative h-12">
           <Image
-            src={data.owner.avatar}
+            src={data?.owner.avatar||""}
             alt="pfp"
            fill
            
@@ -121,8 +121,8 @@ const VideoBottomPart: React.FC<VideoBottomPartProps> = ({ id }) => {
           />{" "}
         </div>
         <div>
-          <p className="font-semibold text-lg">{data.owner.username}</p>
-          <p className="text-base text-gray-300">{data.owner.subscribersCount} subs</p>
+          <p className="font-semibold text-lg">{data?.owner.username}</p>
+          <p className="text-base text-gray-300">{data?.owner.subscribersCount} subs</p>
         </div>
         <Button
           onClickFn={handleSubscribe}

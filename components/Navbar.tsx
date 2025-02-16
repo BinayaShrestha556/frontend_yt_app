@@ -2,6 +2,7 @@
 import { setLoginModalState } from "@/app/GlobalStates/Features/modalSlice";
 import { setLoginState } from "@/app/GlobalStates/Features/login/loginSlice";
 import { setIsSideBarOpen } from "@/app/GlobalStates/Features/sidebarSlice";
+import { setIsSideBarForSmall } from "@/app/GlobalStates/Features/sidebarSlice";
 import { updateObject } from "@/app/GlobalStates/Features/userInfoSlice";
 import { RootState } from "@/app/GlobalStates/store";
 import axios from "axios";
@@ -33,6 +34,7 @@ const Navbar = () => {
   const isLoggedIn = useSelector(
     (state: RootState) => state.isLoggedIn.isLoggedIn
   );
+  const sideBarForSmall=useSelector((state:RootState)=>state.sidebar.sideBarForSmall)
   const modalState = useSelector(
     (state: RootState) => state.loginModal.isModalOpen
   );
@@ -73,7 +75,7 @@ const Navbar = () => {
   };
   const checkLogin = async () => {
     try {
-      const refresh = await axios.post(
+      await axios.post(
         `${process.env.NEXT_PUBLIC_TEST}/user/refresh-access`
       );
       // console.log(refresh.status, " refresh");
@@ -106,6 +108,7 @@ const Navbar = () => {
           <GiHamburgerMenu
             onClick={() => {
               dispatch(setIsSideBarOpen(!isSideBarOpen));
+              dispatch(setIsSideBarForSmall(!sideBarForSmall))
             }}
           />
           <Link className="relative tablet:h-10 h-8 w-28 tablet:w-32" href={"/"}>
